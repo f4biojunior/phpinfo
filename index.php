@@ -1,9 +1,9 @@
 <?php
 
-echo "Teste de php - Tiago Wagner";
-echo " ";
+echo "Teste de php - Tiago Wagner \n";
+
 echo gethostname();
-echo " ";
+echo "\n\n";
 
 phpinfo();
 
