@@ -1,0 +1,6 @@
+web:
+    image: php:7.2-apache
+    ports:
+        - 89:80
+    volumes:
+        - ./src:/var/www/html/
