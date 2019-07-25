@@ -4,7 +4,7 @@ stages:
   - publishImageConfig:
       dockerfilePath: ./Dockerfile
       buildContext: .
-      tag: harbor.rancher.ailos.coop.br/aluno2/phptiago
+      tag: harbor.rancher.ailos.coop.br/aluno2/phpapp
       pushRemote: true
       registry: harbor.rancher.ailos.coop.br
 - name: Deploy
