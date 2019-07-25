@@ -1,0 +1,13 @@
+stages:
+- name: Compile
+  steps:
+  - publishImageConfig:
+      dockerfilePath: ./Dockerfile
+      buildContext: .
+      tag: harbor.rancher.ailos.coop.br/aluno2/phptiago
+- name: Deploy
+  steps:
+  - applyYamlConfig:
+      path: ./deployment-rancher.yaml
+timeout: 60
+notification: {}
