@@ -12,7 +12,7 @@ ENV DOCKAGE_WEBROOT_DIR=/var/www \
     DOCKAGE_ETC_DIR=/etc/dockage \
     DOCKAGE_LOG_DIR=/var/log
 
-ADD ./assets ${DOCKAGE_ETC_DIR}
+ADD ./src ${DOCKAGE_ETC_DIR}
 
 RUN apk update \
     && apk --no-cache add nginx php5-fpm \
