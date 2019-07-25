@@ -1,0 +1,15 @@
+stages:
+- name: Compilar
+  steps:
+  - publishImageConfig:
+      dockerfilePath: ./Dockerfile
+      buildContext: .
+      tag: harbor.rancher.ailos.coop.br/aluno2/phpapp
+      pushRemote: true
+      registry: harbor.rancher.ailos.coop.br
+- name: DEployKube
+  steps:
+  - applyYamlConfig:
+      path: ./deployment-rancher.yaml
+timeout: 60
+notification: {}
