@@ -1,0 +1,116 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: logs
+  namespace: phpapp
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  - nodes/proxy
+  - services
+  - endpoints
+  - pods
+  verbs:
+  - get
+  - list
+  - watch
+- nonResourceURLs:
+  - /metrics
+  verbs:
+  - get
+
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: logs
+  namespace: phpapp
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: logs
+subjects:
+- kind: Group
+  name: system:serviceaccounts
+  apiGroup: rbac.authorization.k8s.io
+- kind: ServiceAccount
+  name: logs
+  namespace: phpapp
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: logs
+  namespace: phpapp
+
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: phpapp
+  namespace: phpapp
+  labels:
+    allow.http: "false"
+    application: phpapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      application: phpapp
+  template:
+    metadata:
+      labels:
+        application: phpapp
+    spec:
+      serviceAccount: logs
+      containers:
+      - name: phpapp
+        image: harbor.rancher.ailos.coop.br/aluno2/phpapp
+        env:
+        - name: PASS
+          value: "wagner"
+        - name: USER
+          value: "tiago"
+        ports:
+        - containerPort: 8778
+        securityContext:
+          privileged: true
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phpapp
+  namespace: phpapp
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80 # Porta a ser exposta pelo SERVICE
+    targetPort: 8778 # Porta que a aplicação está rodando no POD
+  selector:
+    application: phpapp
+
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: phpapp
+  namespace: phpapp
+  annotations:
+    allow.http: "false"
+
+spec:
+  rules:
+  - host: phpapp.aluno2.rancher.ailoshml.coop.br
+    http:
+      paths:
+        - path: /
+          backend:
+            serviceName: phpapp
+            servicePort: 80 # Porta que sera usada pelo SERVICE - DEVE SER A MESMA do SERVICE
