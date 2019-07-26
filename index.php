@@ -1,7 +1,7 @@
 <?php
-$msg="Ola Mundo do Tiago 5 - depois do if dentro do jenkins, quero ver - agora com BR! </br></br>";
+$msg="Ola Mundo do Fábio Jr.! </br></br>";
 echo $msg;
-$msg2="Openshift Ailos - 22 de Fevereiro </br>";
+$msg2="Rancher - 26 de Julho </br>";
 echo $msg2;
 echo '</br>';
 echo gethostname();
